@@ -1,13 +1,12 @@
-# ✅ Logo Integration COMPLETE
+# Warehouse Form Task Progress
 
-## Completed Steps:
-- [x] Edit App.jsx: Logo placeholder → `<img src="/logo.jpeg" alt="Company Logo" className="logo-image" />`
-- [x] Added `.logo-image` CSS: Full size, contain, circle fit
-- [x] Verified: Fits .logo-circle (90px screen/80px print), grid layout intact (logo right, date left, company center)
-- [x] Print/PDF: Bulletproof via existing @media print styles
+## Task: Make "اسم الصنف" column large/centered, next two columns small/equal size
 
-## Test:
-- Screen: `npm run dev` → Header shows logo.jpeg perfectly
-- PDF: Print → Save as PDF → Exact layout match
+### Steps:
+- [x] 1. Analyze project files (App.jsx, WarehouseForm.css)
+- [x] 2. Create detailed edit plan and get user approval
+- [x] 3. Edit WarehouseForm.css with nth-child column widths
+- [x] 4. Update print styles for PDF consistency  
+- [ ] 5. Test rendering and print preview
+- [ ] 6. Final verification and task completion
 
-**Production Ready!** 🎉
