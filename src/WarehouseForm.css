@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: 'Traditional Arabic', 'Arial', 'Tahoma', sans-serif;
+  font-family: 'Noto Naskh Arabic', 'Traditional Arabic', 'Arial', 'Tahoma', sans-serif;
   direction: rtl;
   background-color: #f5f5f5;
   -webkit-font-smoothing: antialiased;
@@ -65,9 +65,9 @@ body {
 /* Header Section - RTL Layout Fixed (Identical to PDF) */
 .form-header {
   display: grid;
-  grid-template-columns: 160px 1fr 110px;
+  grid-template-columns: 140px 1.3fr 100px;
   grid-template-areas: "logo company date";
-  gap: 0 25px;
+  gap: 0 20px;
   align-items: start;
   margin-bottom: 25px;
   padding: 15px 25px;
@@ -75,6 +75,7 @@ body {
   border: 2px solid #ddd;
   border-bottom-width: 4px;
   background: #fafafa;
+  min-height: 120px;
 }
 
 .date-section {
@@ -110,16 +111,20 @@ body {
   justify-self: center;
   text-align: center;
   margin: 8px 0;
-  padding: 0;
+  padding: 0 15px;
+  max-width: 100%;
+  min-height: 60px;
 }
 
 .company-name {
-  font-size: 22px;
+  font-size: 28px;
   white-space: nowrap;
-  line-height: 1.05;
+  line-height: 1.5;
   font-weight: bold;
   margin-bottom: 5px;
   color: #000;
+  text-align: center;
+  width: 100%;
 }
 
 .company-name-en {
@@ -131,10 +136,14 @@ body {
 }
 
 .form-title {
-  font-size: 20px;
+  font-size: 22px;
+  overflow-wrap: break-word;
+  line-height: 1.5;
   font-weight: bold;
   margin-top: 10px;
   color: #000;
+  text-align: center;
+  width: 100%;
 }
 
 .date-section {
@@ -142,7 +151,8 @@ body {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  order: 3; /* Date on the LEFT side */
+  order: 3;
+  /* Date on the LEFT side */
 }
 
 .date-section label {
@@ -231,6 +241,9 @@ body {
 .items-table th:nth-child(3),
 .items-table td:nth-child(3) {
   width: 45%;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 .items-table th:nth-child(4),
@@ -324,7 +337,7 @@ body {
 
 /* Print Styles */
 @media print {
-@page {
+  @page {
     margin: 0.5cm;
     size: A4 portrait;
     height: 29.7cm;
@@ -370,14 +383,14 @@ body {
     font-size: 11pt !important;
   }
 
-  /* BULLETPROOF HORIZONTAL HEADER - Grid Layout */
+  /* BULLETPROOF HORIZONTAL HEADER - Wider for PDF */
   .form-header {
     display: grid !important;
-    grid-template-columns: 160px 1fr 110px !important;
+    grid-template-columns: 140px 1.3fr 100px !important;
     grid-template-areas: "logo company date" !important;
-    gap: 0 25px !important;
+    gap: 0 20px !important;
     align-items: start !important;
-    min-height: 105px !important;
+    min-height: 130px !important;
     margin-bottom: 25px !important;
     padding: 15px 25px !important;
     page-break-inside: avoid !important;
@@ -399,8 +412,8 @@ body {
     justify-self: center !important;
     text-align: center !important;
     margin: 5px 0 !important;
-    padding: 0 25px !important;
-    max-width: 65% !important;
+    padding: 0 30px !important;
+    max-width: 100% !important;
   }
 
   .logo-placeholder {
@@ -422,14 +435,15 @@ body {
     font-weight: bold !important;
   }
 
-.company-name { 
+  .company-name {
     font-size: 20px !important;
     font-weight: bold !important;
     margin: 0 !important;
-    line-height: 1 !important;
+    line-height: 1.5 !important;
     white-space: nowrap !important;
+    max-width: 100% !important;
   }
-  
+
   .company-name-en {
     display: block !important;
     font-size: 11px !important;
@@ -440,17 +454,19 @@ body {
   }
 
   .form-title {
-    font-size: 16px !important;
+    font-size: 18px !important;
     font-weight: bold !important;
     margin: 2px 0 0 0 !important;
-    line-height: 1 !important;
-    white-space: nowrap !important;
+    line-height: 1.5 !important;
+    overflow-wrap: break-word !important;
   }
 
-  /* Single line headline container */
+  /* Flexible headline container - PDF optimized */
   .company-info {
-    max-height: 38px !important;
-    line-height: 1 !important;
+    max-width: 100% !important;
+    min-height: 70px !important;
+    line-height: 1.5 !important;
+    padding: 0 30px !important;
   }
 
   /* Ensure proper rendering in PDF */
@@ -461,9 +477,15 @@ body {
   }
 
   /* Better font rendering for Arabic in PDF */
-  body, input, .table-input, .info-input, th, td {
-    font-family: 'Traditional Arabic', 'Arial', 'Tahoma', sans-serif !important;
+  body,
+  input,
+  .table-input,
+  .info-input,
+  th,
+  td {
+    font-family: 'Noto Naskh Arabic', 'Traditional Arabic', 'Arial', 'Tahoma', sans-serif !important;
     -webkit-font-smoothing: antialiased !important;
+    line-height: 1.5 !important;
   }
 
   /* Table stability */
@@ -487,7 +509,8 @@ body {
   }
 
   /* No scaling issues */
-  input, textarea {
+  input,
+  textarea {
     border: none !important;
     background: transparent !important;
   }
@@ -523,6 +546,7 @@ body {
 
   .company-name {
     font-size: 20px;
+    white-space: normal;
   }
 
   .form-title {

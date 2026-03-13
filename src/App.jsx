@@ -34,20 +34,52 @@ const WarehouseForm = () => {
     }));
   };
 
-  // Main solution: Use browser's print to PDF
-  const generatePDF = () => {
-    // Hide buttons before printing
-    const buttons = document.querySelector('.action-buttons');
-    if (buttons) buttons.style.display = 'none';
+  // Generate PDF with timestamp filename using html2pdf.js
+    const generatePDF = async () => {
+      // Hide buttons before printing
+      const buttons = document.querySelector('.action-buttons');
+      if (buttons) buttons.style.display = 'none';
 
-    // Trigger print dialog (user can save as PDF)
-    window.print();
+      // Wait for DOM to fully render
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Show buttons again after print dialog closes
-    setTimeout(() => {
+      // Dynamically import html2pdf
+      const html2pdf = (await import('html2pdf.js')).default;
+
+      // Generate timestamp
+      const now = new Date();
+      const timestamp = now.toISOString().slice(0, 19).replace(/:/g, '-');
+      const filename = `warehouse-slip-${timestamp}.pdf`;
+
+      const formElement = document.querySelector('.form-container');
+      const opt = {
+        margin: 0.5,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          width: formElement.scrollWidth,
+          height: formElement.scrollHeight
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait',
+          putOnlyUsedFonts: true,
+          floatPrecision: 16
+        }
+      };
+
+      // Generate PDF from form container
+      await html2pdf().set(opt).from(formElement).save();
+
+      // Show buttons again
       if (buttons) buttons.style.display = 'flex';
-    }, 100);
-  };
+    };
 
   const handlePrint = () => {
     window.print();
