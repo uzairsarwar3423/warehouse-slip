@@ -25,13 +25,17 @@ const WarehouseForm = () => {
     }));
   };
 
-  const handleItemChange = (index, field, value) => {
+  const handleItemChange = (index, field, value, element) => {
     const updatedItems = [...formData.items];
     updatedItems[index][field] = value;
     setFormData(prev => ({
       ...prev,
       items: updatedItems
     }));
+    if (element && element.tagName.toLowerCase() === 'textarea') {
+      element.style.height = 'auto';
+      element.style.height = element.scrollHeight + 'px';
+    }
   };
 
   // Generate PDF with timestamp filename using html2pdf.js
@@ -52,6 +56,25 @@ const WarehouseForm = () => {
     const filename = `warehouse-slip-${timestamp}.pdf`;
 
     const formElement = document.querySelector('.form-container');
+
+    // html2canvas workaround: Replace inputs with spanning text elements so they can word-wrap
+    const inputs = formElement.querySelectorAll('input, textarea');
+    const inputReplacements = [];
+    inputs.forEach(input => {
+      const textDiv = document.createElement('div');
+      textDiv.textContent = input.value || '';
+      textDiv.className = input.className;
+      textDiv.style.whiteSpace = 'pre-wrap';
+      textDiv.style.wordWrap = 'break-word';
+      textDiv.style.overflowWrap = 'break-word';
+      textDiv.style.display = (input.className.includes('table-input') || input.className.includes('info-input')) ? 'block' : 'inline-block';
+      textDiv.style.minHeight = input.offsetHeight + 'px';
+
+      input.style.display = 'none';
+      input.parentNode.insertBefore(textDiv, input);
+      inputReplacements.push({ input, textDiv });
+    });
+
     const opt = {
       margin: 0.5,
       filename: filename,
@@ -86,6 +109,12 @@ const WarehouseForm = () => {
     // Restore original styling and show buttons again
     formElement.style.width = originalWidth;
     formElement.style.maxWidth = originalMaxWidth;
+
+    inputReplacements.forEach(({ input, textDiv }) => {
+      input.style.display = '';
+      textDiv.remove();
+    });
+
     if (buttons) buttons.style.display = 'flex';
   };
 
@@ -171,35 +200,35 @@ const WarehouseForm = () => {
               <tr key={item.id}>
                 <td className="row-number">{item.id}</td>
                 <td>
-                  <input
-                    type="text"
+                  <textarea
                     value={item.itemNumber}
-                    onChange={(e) => handleItemChange(index, 'itemNumber', e.target.value)}
+                    onChange={(e) => handleItemChange(index, 'itemNumber', e.target.value, e.target)}
                     className="table-input"
+                    rows="1"
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <textarea
                     value={item.itemName}
-                    onChange={(e) => handleItemChange(index, 'itemName', e.target.value)}
+                    onChange={(e) => handleItemChange(index, 'itemName', e.target.value, e.target)}
                     className="table-input"
+                    rows="1"
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <textarea
                     value={item.quantityPieces}
-                    onChange={(e) => handleItemChange(index, 'quantityPieces', e.target.value)}
+                    onChange={(e) => handleItemChange(index, 'quantityPieces', e.target.value, e.target)}
                     className="table-input"
+                    rows="1"
                   />
                 </td>
                 <td>
-                  <input
-                    type="text"
+                  <textarea
                     value={item.quantityCartons}
-                    onChange={(e) => handleItemChange(index, 'quantityCartons', e.target.value)}
+                    onChange={(e) => handleItemChange(index, 'quantityCartons', e.target.value, e.target)}
                     className="table-input"
+                    rows="1"
                   />
                 </td>
               </tr>
