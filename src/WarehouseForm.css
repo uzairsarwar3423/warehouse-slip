@@ -529,14 +529,29 @@ body {
   }
 
   .table-input {
-    font-size: 11px;
-    padding: 2px;
-    height: 20px;
+    font-size: 12px;
+    padding: 4px;
+    height: auto;
+    min-height: 24px;
   }
 
   .btn {
     padding: 10px 20px;
     font-size: 14px;
+  }
+
+  /* Fix mobile input text visibility */
+  input:focus {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+  .date-input:focus,
+  .info-input:focus,
+  .table-input:focus,
+  .signature-input:focus {
+    background-color: #fffbf0 !important;
+    color: #000 !important;
   }
 }
 
@@ -565,5 +580,16 @@ body {
 
   .btn {
     width: 100%;
+  }
+
+  /* Extra mobile input fixes */
+  .table-input {
+    font-size: 12px !important;
+    padding: 4px !important;
+  }
+
+  input:focus {
+    background-color: #fff !important;
+    color: #000 !important;
   }
 }
