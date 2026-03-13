@@ -35,51 +35,59 @@ const WarehouseForm = () => {
   };
 
   // Generate PDF with timestamp filename using html2pdf.js
-    const generatePDF = async () => {
-      // Hide buttons before printing
-      const buttons = document.querySelector('.action-buttons');
-      if (buttons) buttons.style.display = 'none';
+  const generatePDF = async () => {
+    // Hide buttons before printing
+    const buttons = document.querySelector('.action-buttons');
+    if (buttons) buttons.style.display = 'none';
 
-      // Wait for DOM to fully render
-      await new Promise(resolve => setTimeout(resolve, 500));
+    // Wait for DOM to fully render
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Dynamically import html2pdf
-      const html2pdf = (await import('html2pdf.js')).default;
+    // Dynamically import html2pdf
+    const html2pdf = (await import('html2pdf.js')).default;
 
-      // Generate timestamp
-      const now = new Date();
-      const timestamp = now.toISOString().slice(0, 19).replace(/:/g, '-');
-      const filename = `warehouse-slip-${timestamp}.pdf`;
+    // Generate timestamp
+    const now = new Date();
+    const timestamp = now.toISOString().slice(0, 19).replace(/:/g, '-');
+    const filename = `warehouse-slip-${timestamp}.pdf`;
 
-      const formElement = document.querySelector('.form-container');
-      const opt = {
-        margin: 0.5,
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: '#ffffff',
-          width: formElement.scrollWidth,
-          height: formElement.scrollHeight
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait',
-          putOnlyUsedFonts: true,
-          floatPrecision: 16
-        }
-      };
-
-      // Generate PDF from form container
-      await html2pdf().set(opt).from(formElement).save();
-
-      // Show buttons again
-      if (buttons) buttons.style.display = 'flex';
+    const formElement = document.querySelector('.form-container');
+    const opt = {
+      margin: 0.5,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: 1024,
+        scrollY: 0
+      },
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait',
+        putOnlyUsedFonts: true,
+        floatPrecision: 16
+      }
     };
+
+    // Force desktop width for consistent PDF output and avoid mobile cutoff
+    const originalWidth = formElement.style.width;
+    const originalMaxWidth = formElement.style.maxWidth;
+    formElement.style.width = '794px';
+    formElement.style.maxWidth = '794px';
+
+    // Generate PDF from form container
+    await html2pdf().set(opt).from(formElement).save();
+
+    // Restore original styling and show buttons again
+    formElement.style.width = originalWidth;
+    formElement.style.maxWidth = originalMaxWidth;
+    if (buttons) buttons.style.display = 'flex';
+  };
 
   const handlePrint = () => {
     window.print();
@@ -115,7 +123,7 @@ const WarehouseForm = () => {
             <p className="company-name-en">malath aloula for industry c.o</p>
             <h2 className="form-title">اذن صرف مخزني</h2>
           </div>
-          
+
 
           <div className="logo-placeholder">
             <div className="logo-circle">
